@@ -43,7 +43,7 @@ By inspecting this file I learned that:
 
 ```
 1.	tail -n +3 transposed_genotypes.txt > Transposed_1header.txt
-2.	sed 's/Group/SNP_ID1/g' Transposed_1header.txt > transposed_Group.txt 
+2.	sed 's/Group/SNP_ID/g' Transposed_1header.txt > transposed_Group.txt 
 3.	tail -n +6 Transposed_1header.txt | awk -F "\t" '{print NF; exit}'
 4.	tail -n +6 transposed_Group.txt | awk -F "\t" '{print NF; exit}'
 5.	join -1 1 -2 1 -t $'\t' snp_position.txt transposed_Group.txt > transjoin.txt
@@ -58,7 +58,7 @@ By inspecting this file I learned that:
 14.	grep -v "^#" maize_sorted.txt | cut -f2 | sort | uniq -c
 15.	mkdir Maize_Increasing Maize_Decreasing 
 16.	for i in {1..10}; do
-{ head -n 1 updated_maize_sorted.txt && awk -v chr="$i" '$2 == chr' updated_Sortedmaize_file.txt; } > "Maize_chromo${i}.txt"
+{ head -n 1 maize_sorted.txt && awk -v chr="$i" '$2 == chr' maize_sorted.txt; } > "Maize_chromo${i}.txt"
  mv "Maize_chromo${i}.txt" Maize_Increasing/
 done
 17.	{ head -n 1 maize_sorted.txt && awk '$2 == "multiple"' maize_sorted.txt; } > Maize_chrM.txt && { head -n 1 maize_sorted.txt && awk '$2 == "unknown"' maize_sorted.txt; } > Maize_chrU.txt
@@ -105,17 +105,19 @@ Here is my brief description of what this code does
 ```
 1.	awk '{for(i=1;i<=NF;i++) if ($i == "ZMPBA") print "Found at column " i}' transjoin.txt
 2.	awk '{for(i=1;i<=NF;i++) if ($i == "ZMPJA") print "Found at column " i}' transjoin.txt
-1.	awk '{for(i=1;i<=NF;i++) if ($i == "ZMPIL") print "Found at column " i}' transjoin.txt
-2.	cut -d $'\t' -f1,3,4,89-988,1178-1218,989-1022 transjoin.txt  > Teosinte.txt
-3.	(head -n 1 Teosinte.txt && tail -n +2 Teosinte.txt | sort -k3,3n) > Teosinte_sorted.txt
-4.	grep -v "^#" Teosinte_sorted.txt | cut -f2 | sort | uniq -c
-5.	{ head -n 1 Teosinte_sorted.txt && awk -v chr="$i" '$2 == chr' Teosinte_sorted.txt; } > "Teosinte_chromo${i}.txt"
-6.	mv Teosinte_chromo*.txt Teosinte/
-7.	{ head -n 1 Teosinte_sorted.txt && awk '$2 == "multiple"' Teosinte_sorted.txt; } > Teosinte_chromoM.txt && \
+3.	awk '{for(i=1;i<=NF;i++) if ($i == "ZMPIL") print "Found at column " i}' transjoin.txt
+4.	cut -d $'\t' -f1,3,4,89-988,1178-1218,989-1022 transjoin.txt  > Teosinte.txt
+5.	(head -n 1 Teosinte.txt && tail -n +2 Teosinte.txt | sort -k3,3n) > Teosinte_sorted.txt
+6.	grep -v "^#" Teosinte_sorted.txt | cut -f2 | sort | uniq -c
+7.	{ head -n 1 Teosinte_sorted.txt && awk -v chr="$i" '$2 == chr' Teosinte_sorted.txt; } > "Teosinte_chromo${i}.txt"
+done
+8.	mv Teosinte_chromo*.txt Teosinte/
+9.	{ head -n 1 Teosinte_sorted.txt && awk '$2 == "multiple"' Teosinte_sorted.txt; } > Teosinte_chromoM.txt && \
 { head -n 1 Teosinte_sorted.txt && awk '$2 == "unknown"' Teosinte_sorted.txt; } > Teosinte_chromoU.txt
-8.	mv Teosinte_chromoM.txt Teosinte_chromoU.txt Teosinte/
-9.	sed 's/?/-/g' Teosinte_sorted.txt > Teosinte-sorted.txt
-10.	for i in {1..10}; do
+10.	mv Teosinte_chromoM.txt Teosinte_chromoU.txt Teosinte/
+11.	sed 's/?/-/g' Teosinte_sorted.txt > Teosinte-sorted.txt
+12.(head -n 1 Teosinte-sorted.txt && tail -n +2 Teosinte-sorted.txt | sort -k3,3nr) > TDsorted.txt
+13. for i in {1..10}; do
 { head -n 1 TDsorted && awk -v chr="$i" '$2 == chr' TDsorted; } > "Teosinte_chromo${i}.txt"
 done
 ```
@@ -123,15 +125,17 @@ done
 
 Here is my brief description of what this code does
 
-1.	Search for the string “ZMPBA” in each column of transjoin.txt and print the no of column. 
-2.	Same as 1 search for “ZMPJA”
-3.	Same as 2, search for “ZMPIL”
-4.	Extracts columns 1, 3, 4, and ranges 89-988, 1178-1218, 989-1022 from transjoin.txt and saves it as Teosinte.txt.
-5.	Sorts the Teosinte.txt file by the 3rd column in ascending numerical order and saves it as Teosinte_sorted.txt. The header is retained at the top.
-6.	Removes lines starting with #, extracts the 2nd column, sorts, and counts the unique occurrences of each value.
-7.	For each chromosome (1-10), this extracts the lines where the 2nd column equals the chromosome number and saves it into separate files like Teosinte_chromo1.txt, Teosinte_chromo2.txt, etc.
-8.	Moves all Teosinte_chromo*.txt files into the Teosinte/ directory.
-9.	Extracts rows where the 2nd column is “multiple” and “unknown” and saves them in Teosinte_chromoM.txt and Teosinte_chromoU.txt.
-10.	Moves the files Teosinte_chromoM.txt and Teosinte_chromoU.txt into the Teosinte/ directory.
-11.	Replaces all occurrences of ? with - in Teosinte_sorted.txt and saves the result as Teosinte-sorted.txt.
-12.	For chromosomes 1 to 10, this filters rows based on the 2nd column matching the chromosome number and saves them as separate files (Teosinte_chromo1.txt, Teosinte_chromo2.txt, etc.).
+1. This awk command loops through every field in each line ($i represents each column) of transjoin.txt to check if the value in the column is “ZMPBA”. If it finds this string, it prints the message "Found at column" followed by the column number (i).
+2. This works similarly to the previous awk command but looks for the string “ZMPJA” instead.
+3. This awk command searches for the string “ZMPIL” in all columns of transjoin.txt and prints the column number where it finds the string.
+4. Extracts important data (from the specified columns) into a new file called Teosinte.txt.
+5. Sorts the data in Teosinte.txt based on the 3rd column in numerical ascending order and retains the header in the sorted file.
+6. This helps to count how many times each unique value appears in the 2nd column of Teosinte_sorted.txt, excluding any comment lines.
+7. This separates the data into different files based on chromosomes 1 through 10.
+8. This moves all files starting with Teosinte_chromo into the directory Teosinte/.
+9. The first block extracts rows where the 2nd column is “multiple” and saves them 
+to Teosinte_chromoM.txt.The second block extracts rows where the 2nd column is “unknown” and saves them to Teosinte_chromoU.txt.
+10. This moves the files Teosinte_chromoM.txt and Teosinte_chromoU.txt into the Teosinte/ directory for organization.
+11. The sed command performs a substitution (s/?/-/g), replacing all occurrences of ? with - globally throughout the Teosinte_sorted.txt file.
+12. This sorts the data by the 3rd column in descending order while keeping the header intact.
+13. Similar to step 7, but working with the TDsorted.txt file. It extracts rows for chromosomes 1 to 10 and saves them into separate files, e.g., Teosinte_chromo1.txt, Teosinte_chromo2.txt, etc.
