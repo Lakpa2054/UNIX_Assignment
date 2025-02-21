@@ -1,8 +1,8 @@
 ## Course Assignments
 
 A description of files within this folder:
-
-* `UNIX_Assignment.md` and `UNIX_Assignment.pdf`: Instructions for the assignment
-* `UNIX_Assignment_Template.md` and `UNIX_Assignment_Template.pdf`: An example of what your Markdown file should look like when you submit your assignment, including some Markdown syntax that should be helpful for you. The pdf shows how this file is rendered using a tool such as "MacDown"
-* The two files `fang_et_al_genotypes.txt` and `snp_positions.txt` are data files you will be reformatting for the assignment
-* The `transpose.awk` script will be needed to transpose the data (see instructions in `UNIX_Assignment.md`)
+* The file `fang_et_al_genotypes.txt` was used for the analysis which was transpose using transpose.awk. The tranposed file was 'transpoed_genotypes.txt'.
+* `snp_positions.txt` is another file used for analysis.
+* `transjoin.txt' is the joint file of two files `snp_positions.txt' and `transposed_genotypes.txt'.
+* `Maize' folder contains files `Increasing` (contains 10 files of chromosomes in increasing order) and `Decreasing` contains 10 files in decreasing order, multiple and Unknown chromosomes. 
+* Teosinte_ folder contails files `Increasing` (contains 10 files of chromosomes in increasing order) and `Decreasing` contains 10 files in decreasing order, multiple and Unknown chromosomes. 
