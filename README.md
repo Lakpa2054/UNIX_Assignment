@@ -1,16 +1,15 @@
-#UNIX Assignment
+# UNIX Assignment
 
-##Data Inspection
+## Data Inspection
 
-###Attributes of `fang_et_al_genotypes`
+### Attributes of `fang_et_al_genotypes`
 
-```
-here is my snippet of code used for data inspection
 ```
 wc fang_et_al_genotypes.tx
 wc -l fang_et_al_genotypes.tx #gave me only the lines 2783
 du -h fang_et_al_genotypes.txt
 awk -F "\t" '{print NF; exit}' fang_et_al_genotypes.txt
+```
 
 
 By inspecting this file I learned that:
@@ -21,15 +20,15 @@ By inspecting this file I learned that:
 
 
 
-###Attributes of `snp_position.txt`
+### Attributes of `snp_position.txt`
 
-```
-here is my snippet of code used for data inspection
 ```
 wc snp_position.txt
 wc -l snp_position.txt
 du -h snp_position.txt
 awk -F "\t" '{print NF; exit}' snp_position.txt
+```
+
 
 By inspecting this file I learned that:
 1.	The snp_position.txt file contains 984 lines, 13198 words, and 82763 number of bytes in the files. 
@@ -38,12 +37,10 @@ By inspecting this file I learned that:
 4.	Number of columns is 15 
 
 
-##Data Processing
+## Data Processing
 
-###Maize Data
+### Maize Data
 
-```
-here is my snippet of code used for data processing
 ```
 1.	tail -n +3 transposed_genotypes.txt > Transposed_1header.txt
 2.	sed 's/Group/SNP_ID1/g' Transposed_1header.txt > transposed_Group.txt 
@@ -73,6 +70,8 @@ done
 23.	out_file="Maize_chromo_Decreasing_sorted${i}.txt"
     { head -n 1 MDsorted.txt && awk -v chr="$i" '$2 == chr' MDsorted.txt; } > "$out_file"
    echo "Chromosome $i: $(wc -l < "$out_file") lines"
+```
+
 
 Here is my brief description of what this code does
 1.	Tail -n +3 print the line 3 onward instead of printing the default last few lines. It skipped the whole row of Sample_ID and JG_OTU, redirected the output of the tail command of transposed_genotypes.txt into new file called Transposed_1header.txt.
@@ -101,10 +100,8 @@ Here is my brief description of what this code does
 
 
 
-###Teosinte Data
+### Teosinte Data
 
-```
-here is my snippet of code used for data processing
 ```
 1.	awk '{for(i=1;i<=NF;i++) if ($i == "ZMPBA") print "Found at column " i}' transjoin.txt
 2.	awk '{for(i=1;i<=NF;i++) if ($i == "ZMPJA") print "Found at column " i}' transjoin.txt
@@ -120,8 +117,8 @@ here is my snippet of code used for data processing
 9.	sed 's/?/-/g' Teosinte_sorted.txt > Teosinte-sorted.txt
 10.	for i in {1..10}; do
 { head -n 1 TDsorted && awk -v chr="$i" '$2 == chr' TDsorted; } > "Teosinte_chromo${i}.txt"
-Done
-
+done
+```
 
 
 Here is my brief description of what this code does
